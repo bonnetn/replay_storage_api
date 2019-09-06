@@ -89,8 +89,8 @@ class RootReplayHandler(tornado.web.RequestHandler):
 
 def make_app():
     return tornado.web.Application([
-        (r"/", RootReplayHandler),
-        (r"/(.+)", GetReplayHandler),
+        (r"/replay/", RootReplayHandler),
+        (r"/replay/(.+)", GetReplayHandler),
     ])
 
 
