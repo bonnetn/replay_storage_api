@@ -102,7 +102,7 @@ def make_app():
     return tornado.web.Application([
         (r"/replay/", RootReplayHandler),
         (r"/replay/(.+)", GetReplayHandler),
-    ])
+    ], compress_response=True)
 
 
 if __name__ == "__main__":
