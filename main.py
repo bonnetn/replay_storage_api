@@ -1,3 +1,4 @@
+import gzip
 import json
 import logging
 import os
@@ -29,7 +30,7 @@ if not os.path.exists(UPLOAD_DIR):
 # Successful
 
 def get_file_path(replay_uuid):
-    return os.path.join(PATH, UPLOAD, str(replay_uuid))
+    return os.path.join(PATH, UPLOAD, str(replay_uuid) + ".json.gz")
 
 
 class GetReplayHandler(tornado.web.RequestHandler):
@@ -41,7 +42,7 @@ class GetReplayHandler(tornado.web.RequestHandler):
             raise tornado.web.HTTPError(status_code=400, log_message='not a valid ID')
 
         try:
-            with open(get_file_path(replay_uuid), 'rb') as f:
+            with gzip.open(get_file_path(replay_uuid), 'rb') as f:
                 self.write(json.loads(f.read()))
         except FileNotFoundError:
             raise tornado.web.HTTPError(status_code=404, log_message='not found')
@@ -81,7 +82,7 @@ class RootReplayHandler(tornado.web.RequestHandler):
             with con:
                 con.execute("INSERT INTO uploads (uuid) VALUES (?)", (str(replay_uuid),))
 
-            with open(get_file_path(replay_uuid), "wb") as f:
+            with gzip.open(get_file_path(replay_uuid), "wb") as f:
                 f.write(json.dumps(body).encode())
 
             self.write({'id': str(replay_uuid)})
