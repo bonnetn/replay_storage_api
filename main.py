@@ -34,6 +34,12 @@ def get_file_path(replay_uuid):
 
 
 class GetReplayHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        # Enable CORS.
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+
     def get(self, user_input):
         # Make sure the UUID provided is a valid UUID.
         try:
@@ -46,6 +52,10 @@ class GetReplayHandler(tornado.web.RequestHandler):
                 self.write(json.loads(f.read()))
         except FileNotFoundError:
             raise tornado.web.HTTPError(status_code=404, log_message='not found')
+
+    def options(self, _):
+        self.set_status(204)
+        self.finish()
 
 
 class RootReplayHandler(tornado.web.RequestHandler):
