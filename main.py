@@ -12,7 +12,7 @@ import tornado.ioloop
 import tornado.web
 from tornado import options
 
-SIZE_LIMIT = 1 * 1e6
+SIZE_LIMIT = 10 * 1e6
 PATH = os.getenv('STORAGE_PATH', default='/tmp/')
 UPLOAD = 'upload/'
 DB = 'upload.db'
