@@ -4,6 +4,7 @@ import logging
 import os
 import sqlite3
 import uuid
+import zlib
 from json import JSONDecodeError
 
 import tornado.httpserver
@@ -81,7 +82,10 @@ class RootReplayHandler(tornado.web.RequestHandler):
             # The file must be valid JSON.
             info = files[0]
             try:
-                body = json.loads(info["body"])
+                data = info['body']
+                if field_name == 'my_compressed_file':
+                    data = zlib.decompress(data)
+                body = json.loads(data)
             except JSONDecodeError:
                 raise tornado.web.HTTPError(status_code=400, log_message='data is not valid JSON')
 
