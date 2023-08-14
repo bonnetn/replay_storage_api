@@ -4,4 +4,4 @@
 #
 #    pip-compile
 #
-tornado==6.0.3
+tornado==6.3.3
